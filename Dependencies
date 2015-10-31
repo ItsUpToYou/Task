@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+
+using Newtonsoft.Json;
+using System.Web;
+using Newtonsoft.Json.Linq;
+using System.IO;
+using System.Web.Script.Serialization;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        public class Packages
+        {
+            public List<string> backbone { get; set; }
+            public List<string> jQuery { get; set; }
+            public List<string> underscore { get; set; }
+            public List<string> queryJ { get; set; }
+            public List<string> lodash { get; set; }
+        }
+
+        public class Dependencies
+        {
+            public string projectName { get; set; }
+            public List<string> dependence { get; set; }
+        }
+        static void Main(string[] args)
+        {
+            Packages install = new Packages
+            {
+                backbone = new List<string> { "jQuery", "underscore" },
+                jQuery = new List<string> { "queryJ" },
+                underscore = new List<string> { "lodash" },
+                queryJ = new List<string> { },
+                lodash = new List<string> { }
+            };
+
+            Dependencies depend = new Dependencies
+            {
+                projectName = "Test0000",
+                dependence = new List<string> { "backbone" }
+            };
+            //string json = JsonConvert.SerializeObject(install, Formatting.Indented);
+            //Console.WriteLine(json);
+            using (StreamWriter file = File.CreateText("jsnInstall.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, install);
+            }
+
+            using (StreamWriter file2 = File.CreateText("jsnDepend.json"))
+            {
+                JsonSerializer serializer2 = new JsonSerializer();
+                serializer2.Serialize(file2, depend);
+            }
+
+
+
+
+            using (StreamReader file = File.OpenText("jsnInstall.json"))
+            using (JsonTextReader reader = new JsonTextReader(file))
+            {
+                JObject o2 = (JObject)JToken.ReadFrom(reader);
+                          }
+
+            
+            Console.WriteLine(depend.dependence[0]);
+        }
+    }
+}
